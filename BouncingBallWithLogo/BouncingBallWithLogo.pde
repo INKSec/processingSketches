@@ -16,10 +16,11 @@ PShape logo;
 
 void setup() {
 
-  size (640, 480, P3D);
+  //size (640, 480, P3D);
   //smooth();
+  fullScreen(P3D);
   texture = loadImage("texture.jpg");
-  logo = createShape(SPHERE, 100);
+  logo = createShape(SPHERE, 200);
   logo.setTexture(texture);
   logo.setStroke(false);
   
