@@ -1,3 +1,5 @@
+import processing.sound.*;
+
 int xPos=320;
 int yPos=240;
 int zPos=1;
@@ -12,17 +14,23 @@ int zDirection=1;
 
 PImage texture;
 PShape logo;
+
+float rotationSphere=0;
+
+SoundFile theSound;
 // end of variables
 
 void setup() {
 
   //size (640, 480, P3D);
-  //smooth();
+  smooth();
   fullScreen(P3D);
   texture = loadImage("texture.jpg");
   logo = createShape(SPHERE, 200);
   logo.setTexture(texture);
   logo.setStroke(false);
+  
+  theSound = new SoundFile(this, "plop2.mp3");
   
 }
 
@@ -34,7 +42,7 @@ void draw() {
 
   // box setup
 
-  //stroke(255); // makes the Box visible
+  stroke(255); // makes the Box visible
 
   // background square
 
@@ -54,6 +62,9 @@ void draw() {
   // inital ball set up
   
   translate (xPos, yPos, -zPos);
+  rotate(rotationSphere);
+  rotateX(rotationSphere);
+  rotationSphere+=0.01;
   //sphere(50);
   
   shape(logo);
@@ -69,29 +80,36 @@ void draw() {
 
   if (xPos>width-50) {
     xDirection*=-1;
+    theSound.play();
+    
   }
 
   if (yPos>height-50) {
     yDirection*=-1;
+    theSound.play();
   }
 
   if (zPos>500) {
     zDirection*=-1;
+    theSound.play();
   }
 
   if (xPos<50) {
     xDirection*=-1;
+    theSound.play();
   }
 
   if (yPos<50) {
     yDirection*=-1;
+    theSound.play();
   }
 
   if (zPos<0) {
     zDirection*=-1;
+    theSound.play();
   }
 
   //reversal
-
+ 
   
 }
