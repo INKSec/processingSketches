@@ -26,12 +26,13 @@ void setup() {
   smooth();
   fullScreen(P3D);
   texture = loadImage("texture.jpg");
-  logo = createShape(SPHERE, 200);
+  logo = createShape(SPHERE, 100);
   logo.setTexture(texture);
   logo.setStroke(false);
   
   theSound = new SoundFile(this, "plop2.mp3");
-  
+  print(height);
+  print(width);
 }
 
 void draw() {
@@ -64,6 +65,7 @@ void draw() {
   translate (xPos, yPos, -zPos);
   rotate(rotationSphere);
   rotateX(rotationSphere);
+  rotateY(rotationSphere);
   rotationSphere+=0.01;
   //sphere(50);
   
