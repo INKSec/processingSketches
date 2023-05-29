@@ -10,8 +10,11 @@ Thomas Sanchez Lengeling.
 
 import KinectPV2.KJoint;
 import KinectPV2.*;
+import processing.sound.*;
+
 
 KinectPV2 kinect;
+SoundFile soundfile;
 
 int coll = 0;
 float handCircleRadius = 50;
@@ -31,6 +34,8 @@ void setup() {
   //kinect.enableDepthMaskImg(true);
   
   kinect.init();
+  
+  soundfile = new SoundFile(this, "vibraphon.aiff");
   
   balls = new ArrayList<Ball>();
   balls.add(new Ball(width/2, 0, ballWidth));

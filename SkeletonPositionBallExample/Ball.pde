@@ -26,6 +26,12 @@ class Ball {
       // Dampening
       speed = speed * -0.8;
       y = height;
+      
+      if(x>0 && x<800) {print(x + "\n");}
+      //if() {}
+      //if() {}
+      //if() {}
+      
     }
   }
   

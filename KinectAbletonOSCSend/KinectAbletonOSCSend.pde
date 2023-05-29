@@ -33,12 +33,14 @@ void draw() {
 
 void mousePressed() {
   /* in the following different ways of creating osc messages are shown by example */
-  OscMessage myMessage = new OscMessage("/live/song/continue_playing");
+  //OscMessage myMessage = new OscMessage("/live/song/continue_playing");
+  OscMessage myMessage2 = new OscMessage("/live/random");
   
   //myMessage.add(123); /* add an int to the osc message */
 
   /* send the message */
-  oscP5.send(myMessage, myRemoteLocation); 
+  oscP5.send(myMessage2, myRemoteLocation); 
+  //oscP5.send(myMessage, myRemoteLocation); 
 }
 
 
