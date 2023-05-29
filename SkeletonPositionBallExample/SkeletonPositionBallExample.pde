@@ -18,13 +18,20 @@ SoundFile soundfile;
 
 int coll = 0;
 float handCircleRadius = 50;
-float cornerCircleRadius = 200;
+float cornerCircleRadius = 50;
 ArrayList<Ball> balls;
 int ballWidth = 48;
+boolean physics = false; // activates the ball physic
+
+ArrayList<SoundFile> sounds;
+
+int time;
+
+PFont calibri;
 
 void setup() {
-  size(1920, 1080, P3D);
-
+  //size(1920, 1080, P3D);
+  fullScreen(P3D);
   kinect = new KinectPV2(this);
 
   kinect.enableSkeletonColorMap(true);
@@ -35,10 +42,26 @@ void setup() {
   
   kinect.init();
   
-  soundfile = new SoundFile(this, "vibraphon.aiff");
+  sounds = new ArrayList<SoundFile>();
+  sounds.add(new SoundFile(this, "cmajor.wav"));
+  sounds.add(new SoundFile(this, "dmajor.wav"));
+  sounds.add(new SoundFile(this, "emajor.wav"));
+  sounds.add(new SoundFile(this, "fmajor.wav"));
+  sounds.add(new SoundFile(this, "gmajor.wav"));
+  sounds.add(new SoundFile(this, "amajor.wav"));
+  sounds.add(new SoundFile(this, "hmajor.wav"));
   
   balls = new ArrayList<Ball>();
-  balls.add(new Ball(width/2, 0, ballWidth));
+ 
+  
+  time = millis(); // initialise timer to draw the circles
+  
+  calibri = createFont("calibri.ttf", 30); // used the font because the standard was blurry
+  
+  
+  
+  
+  
 }
 
 void draw() {
@@ -47,7 +70,8 @@ void draw() {
   // Colorchange Circle
   noFill();
   stroke(255);
-  ellipse(width/4, height/4, cornerCircleRadius*2, cornerCircleRadius*2);
+  ellipse(width-200, height/2, cornerCircleRadius*2, cornerCircleRadius*2); // Button right side to start physics
+  ellipse(width-1500, height/2, cornerCircleRadius*2, cornerCircleRadius*2); // Button left side to stop physics
 
   //image(kinect.getDepthImage(), 0, 0, width, height);
   //image(kinect.getBodyTrackImage(), 0, 0, 1920, 1080);
@@ -70,9 +94,9 @@ void draw() {
       drawBody(joints);
       
       //draw different color for each hand state
-      drawHandState(joints[KinectPV2.JointType_HandRight]);
-      drawHandState(joints[KinectPV2.JointType_HandLeft]);
-      int x = KinectPV2.JointType_HandRight;
+      drawHandState(joints[KinectPV2.JointType_HandRight], time);
+      drawHandState(joints[KinectPV2.JointType_HandLeft], time);
+      
     }
   }
 
@@ -81,37 +105,72 @@ void draw() {
   
   for (int i = balls.size()-1; i >= 0; i--) {
     Ball ball = balls.get(i);
-    ball.move();
+    if(physics == true) {
+    ball.move(sounds);
+    }
     ball.display();
+    if(ball.y == height-50) {
+     balls.remove(i);   
+    }
+    /*
     if (ball.finished()) {
       // Items can be deleted with remove()
       balls.remove(i);
     }
+    */
   }
+  
+  // piano buttons
+  stroke(0);
+  fill(255);
+  // x value left side, y value upper left corner, width, height
+  rect(0, height-50, 274, 50);
+  
+  rect(275, height-50, 274, 50);
+  rect(549, height-50, 274, 50);
+  rect(823, height-50, 274, 50);
+  rect(1097, height-50, 274, 50);
+  rect(1370, height-50, 274, 50);
+  rect(1645, height-50, 274, 50);
+  
+  fill(0);
+  
+  textFont(calibri);
+  //size(1920,1080);
+  text("C-Dur", 0+5, height-25);
+  text("D-Dur", 0+280, height-25);
+  text("E-Dur", 0+554, height-25);
+  text("F-Dur", 0+828, height-25);
+  text("G-Dur", 0+1102, height-25);
+  text("A-Dur", 0+1375, height-25);
+  text("H-Dur", 0+1650, height-25);
   
   
 }
 
 void drawBody(KJoint[] joints) {
     //fill(coll, coll, coll);
-    int count = 0;
-    if(dist(joints[24].getX(),joints[24].getY(),width/4, height/4)< (cornerCircleRadius + handCircleRadius)){
-    fill(255,0,0);
+    
+    //if(dist(joints[24].getX(),joints[24].getY(),width-200, height/2)< (cornerCircleRadius + handCircleRadius)){
+    if(dist(joints[KinectPV2.JointType_HandRight].getX(), joints[KinectPV2.JointType_HandRight].getY() , width-200, height/2)< (cornerCircleRadius + handCircleRadius)){
+      fill(255,0,0);
+    physics = true;
     } else {
     fill(0,255,0);
+    
     }
-    ellipse(joints[24].getX(),joints[24].getY(), handCircleRadius*2, handCircleRadius*2);
+    //ellipse(joints[24].getX(),joints[24].getY(), handCircleRadius*2, handCircleRadius*2);
+    ellipse(joints[KinectPV2.JointType_HandRight].getX(), joints[KinectPV2.JointType_HandRight].getY(), handCircleRadius*2, handCircleRadius*2);
     
     // adds straight line to circle
-    for(int i = 0; i < 50; i++) {
-    fill(100);
-    noStroke();
-    circle(joints[24].getX(),joints[24].getY() - count*4, 20);
-    count++;
+    if(dist(joints[KinectPV2.JointType_HandLeft].getX(), joints[KinectPV2.JointType_HandLeft].getY() , width-1500, height/2)< (cornerCircleRadius + handCircleRadius)){
+    fill(255,0,0);
+    physics = false;
+    } else {
+     fill(0,255,0); 
     }
-    if(count == 400) {
-     count =0; 
-    }
+     ellipse(joints[KinectPV2.JointType_HandLeft].getX(), joints[KinectPV2.JointType_HandLeft].getY(), handCircleRadius*2, handCircleRadius*2);
+   
     
     
    
@@ -188,9 +247,9 @@ void drawBone(KJoint[] joints, int jointType1, int jointType2) {
 }
 
 //draw hand state
-void drawHandState(KJoint joint) {
+void drawHandState(KJoint joint, int time) {
   noStroke();
-  handState(joint.getState(), joint);
+  handState(joint.getState(), joint, time);
   pushMatrix();
   translate(joint.getX(), joint.getY(), joint.getZ());
   
@@ -206,14 +265,18 @@ Different hand state
  KinectPV2.HandState_NotTracked
  */
  
-void handState(int handState, KJoint a) {
+void handState(int handState, KJoint a, int times) {
   switch(handState) {
   case KinectPV2.HandState_Open:
     fill(0, 255, 0);
     break;
   case KinectPV2.HandState_Closed:
     fill(255, 0, 0);
+    // makes sure you can create a ball every x seconds
+    if(millis() > times + 500) {
     balls.add(new Ball(a.getX(), a.getY(), ballWidth));
+    time = millis();
+    }
     break;
   case KinectPV2.HandState_Lasso:
     fill(0, 0, 255);
