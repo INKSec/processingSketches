@@ -10,11 +10,11 @@ class Ball {
   float life = 800;
   
   
-  Ball(float tempX, float tempY, float tempW) {
+  Ball(float tempX, float tempY, float tempW, float tempS) {
     x = tempX;
     y = tempY;
     w = tempW;
-    speed = 0;
+    speed = tempS;
     gravity = 0.01;
   }
   
@@ -43,7 +43,7 @@ class Ball {
     }
       
   }
-  
+  /*
   boolean finished() {
     // Balls fade out
     life--;
@@ -53,6 +53,7 @@ class Ball {
       return false;
     }
   }
+  */
   
   void display() {
     // Display the circle
