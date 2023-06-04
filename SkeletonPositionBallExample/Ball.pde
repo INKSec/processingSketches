@@ -15,7 +15,7 @@ class Ball {
     y = tempY;
     w = tempW;
     speed = 0;
-    gravity = 0.1;
+    gravity = 0.01;
   }
   
     void move(ArrayList<SoundFile> sounds) {
@@ -24,10 +24,9 @@ class Ball {
     // Add speed to y location
     y = y + speed;
     // If square reaches the bottom
-    // Reverse speed
+   
     if (y > height-50) {
-      // Dampening
-      speed = speed * -0.8;
+      
       
       y = height-50;
       
@@ -40,7 +39,9 @@ class Ball {
       if(x>1644 && x<1920) {sounds.get(6).play();}
       
       
+      
     }
+      
   }
   
   boolean finished() {
